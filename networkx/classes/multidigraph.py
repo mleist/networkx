@@ -194,7 +194,8 @@ class MultiDiGraph(MultiGraph, DiGraph):
     extra features can be added. To replace one of the dicts create
     a new graph class by changing the class(!) variable holding the
     factory for that dict-like structure. The variable names are
-    node_dict_factory, node_attr_dict_factory, adjlist_inner_dict_factory,
+    node_dict_factory, node_attr_dict_factory, inner_succ_dict_factory,
+    inner_pred_dict_factory, inner_adj_dict_factory,
     adjlist_outer_dict_factory, edge_key_dict_factory, edge_attr_dict_factory
     and graph_attr_dict_factory.
 
@@ -213,7 +214,17 @@ class MultiDiGraph(MultiGraph, DiGraph):
         in the data structure that holds adjacency info keyed by node.
         It should require no arguments and return a dict-like object.
 
-    adjlist_inner_dict_factory : function, (default: dict)
+    inner_succ_dict_factory : function, (default: dict)
+        Factory function to be used to create the adjacency list
+        dict which holds multiedge key dicts keyed by neighbor.
+        It should require no arguments and return a dict-like object.
+
+    inner_pred_dict_factory : function, (default: dict)
+        Factory function to be used to create the adjacency list
+        dict which holds multiedge key dicts keyed by neighbor.
+        It should require no arguments and return a dict-like object.
+
+    inner_adj_dict_factory : function, (default: dict)
         Factory function to be used to create the adjacency list
         dict which holds multiedge key dicts keyed by neighbor.
         It should require no arguments and return a dict-like object.
@@ -256,7 +267,9 @@ class MultiDiGraph(MultiGraph, DiGraph):
     """
     # node_dict_factory = dict    # already assigned in Graph
     # adjlist_outer_dict_factory = dict
-    # adjlist_inner_dict_factory = dict
+    # inner_succ_dict_factory = dict
+    # inner_pred_dict_factory = dict
+    # inner_adj_dict_factory = dict
     edge_key_dict_factory = dict
     # edge_attr_dict_factory = dict
 
@@ -420,12 +433,12 @@ class MultiDiGraph(MultiGraph, DiGraph):
         u, v = u_for_edge, v_for_edge
         # add nodes
         if u not in self._succ:
-            self._succ[u] = self.adjlist_inner_dict_factory()
-            self._pred[u] = self.adjlist_inner_dict_factory()
+            self._succ[u] = self.inner_succ_dict_factory()
+            self._pred[u] = self.inner_pred_dict_factory()
             self._node[u] = self.node_attr_dict_factory()
         if v not in self._succ:
-            self._succ[v] = self.adjlist_inner_dict_factory()
-            self._pred[v] = self.adjlist_inner_dict_factory()
+            self._succ[v] = self.inner_succ_dict_factory()
+            self._pred[v] = self.inner_pred_dict_factory()
             self._node[v] = self.node_attr_dict_factory()
         if key is None:
             key = self.new_edge_key(u, v)

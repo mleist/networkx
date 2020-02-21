@@ -184,7 +184,8 @@ class DiGraph(Graph):
     maintained but extra features can be added. To replace one of the
     dicts create a new graph class by changing the class(!) variable
     holding the factory for that dict-like structure. The variable names are
-    node_dict_factory, node_attr_dict_factory, adjlist_inner_dict_factory,
+    node_dict_factory, node_attr_dict_factory, inner_succ_dict_factory,
+    inner_pred_dict_factory, inner_adj_dict_factory,
     adjlist_outer_dict_factory, edge_attr_dict_factory and graph_attr_dict_factory.
 
     node_dict_factory : function, (default: dict)
@@ -202,7 +203,17 @@ class DiGraph(Graph):
         in the data structure that holds adjacency info keyed by node.
         It should require no arguments and return a dict-like object.
 
-    adjlist_inner_dict_factory : function, optional (default: dict)
+    inner_succ_dict_factory : function, optional (default: dict)
+        Factory function to be used to create the adjacency list
+        dict which holds edge data keyed by neighbor.
+        It should require no arguments and return a dict-like object
+
+    inner_pred_dict_factory : function, optional (default: dict)
+        Factory function to be used to create the adjacency list
+        dict which holds edge data keyed by neighbor.
+        It should require no arguments and return a dict-like object
+
+    inner_adj_dict_factory : function, optional (default: dict)
         Factory function to be used to create the adjacency list
         dict which holds edge data keyed by neighbor.
         It should require no arguments and return a dict-like object
@@ -294,7 +305,9 @@ class DiGraph(Graph):
         self.node_dict_factory = self.node_dict_factory
         self.node_attr_dict_factory = self.node_attr_dict_factory
         self.adjlist_outer_dict_factory = self.adjlist_outer_dict_factory
-        self.adjlist_inner_dict_factory = self.adjlist_inner_dict_factory
+        self.inner_succ_dict_factory = self.inner_succ_dict_factory
+        self.inner_pred_dict_factory = self.inner_pred_dict_factory
+        self.inner_adj_dict_factory = self.inner_adj_dict_factory
         self.edge_attr_dict_factory = self.edge_attr_dict_factory
 
         self.graph = self.graph_attr_dict_factory()  # dictionary for graph attributes
@@ -408,8 +421,8 @@ class DiGraph(Graph):
         doesn't change on mutables.
         """
         if node_for_adding not in self._succ:
-            self._succ[node_for_adding] = self.adjlist_inner_dict_factory()
-            self._pred[node_for_adding] = self.adjlist_inner_dict_factory()
+            self._succ[node_for_adding] = self.inner_succ_dict_factory()
+            self._pred[node_for_adding] = self.inner_pred_dict_factory()
             attr_dict = self._node[node_for_adding] = self.node_attr_dict_factory()
             attr_dict.update(attr)
         else:  # update attr even if node already exists
@@ -465,8 +478,8 @@ class DiGraph(Graph):
             # while pre-2.7.5 ironpython throws on self._succ[n]
             try:
                 if n not in self._succ:
-                    self._succ[n] = self.adjlist_inner_dict_factory()
-                    self._pred[n] = self.adjlist_inner_dict_factory()
+                    self._succ[n] = self.inner_succ_dict_factory()
+                    self._pred[n] = self.inner_pred_dict_factory()
                     attr_dict = self._node[n] = self.node_attr_dict_factory()
                     attr_dict.update(attr)
                 else:
@@ -474,8 +487,8 @@ class DiGraph(Graph):
             except TypeError:
                 nn, ndict = n
                 if nn not in self._succ:
-                    self._succ[nn] = self.adjlist_inner_dict_factory()
-                    self._pred[nn] = self.adjlist_inner_dict_factory()
+                    self._succ[nn] = self.inner_succ_dict_factory()
+                    self._pred[nn] = self.inner_pred_dict_factory()
                     newdict = attr.copy()
                     newdict.update(ndict)
                     attr_dict = self._node[nn] = self.node_attr_dict_factory()
@@ -575,7 +588,7 @@ class DiGraph(Graph):
 
         Parameters
         ----------
-        u, v : nodes
+        u_of_edge, v_of_edge : nodes
             Nodes can be, for example, strings or numbers.
             Nodes must be hashable (and not None) Python objects.
         attr : keyword arguments, optional
@@ -617,12 +630,12 @@ class DiGraph(Graph):
         u, v = u_of_edge, v_of_edge
         # add nodes
         if u not in self._succ:
-            self._succ[u] = self.adjlist_inner_dict_factory()
-            self._pred[u] = self.adjlist_inner_dict_factory()
+            self._succ[u] = self.inner_succ_dict_factory()
+            self._pred[u] = self.inner_pred_dict_factory()
             self._node[u] = self.node_attr_dict_factory()
         if v not in self._succ:
-            self._succ[v] = self.adjlist_inner_dict_factory()
-            self._pred[v] = self.adjlist_inner_dict_factory()
+            self._succ[v] = self.inner_succ_dict_factory()
+            self._pred[v] = self.inner_pred_dict_factory()
             self._node[v] = self.node_attr_dict_factory()
         # add the edge
         datadict = self._adj[u].get(v, self.edge_attr_dict_factory())
@@ -678,12 +691,12 @@ class DiGraph(Graph):
             else:
                 raise NetworkXError(f"Edge tuple {e} must be a 2-tuple or 3-tuple.")
             if u not in self._succ:
-                self._succ[u] = self.adjlist_inner_dict_factory()
-                self._pred[u] = self.adjlist_inner_dict_factory()
+                self._succ[u] = self.inner_succ_dict_factory()
+                self._pred[u] = self.inner_pred_dict_factory()
                 self._node[u] = self.node_attr_dict_factory()
             if v not in self._succ:
-                self._succ[v] = self.adjlist_inner_dict_factory()
-                self._pred[v] = self.adjlist_inner_dict_factory()
+                self._succ[v] = self.inner_succ_dict_factory()
+                self._pred[v] = self.inner_pred_dict_factory()
                 self._node[v] = self.node_attr_dict_factory()
             datadict = self._adj[u].get(v, self.edge_attr_dict_factory())
             datadict.update(attr)

@@ -15,7 +15,13 @@ def test_factories():
     class mydict2(dict):
         pass
 
-    class mydict3(dict):
+    class mydict3s(dict):
+        pass
+
+    class mydict3p(dict):
+        pass
+
+    class mydict3a(dict):
         pass
 
     class mydict4(dict):
@@ -29,18 +35,23 @@ def test_factories():
         class MyGraph(Graph):
             node_dict_factory = mydict1
             adjlist_outer_dict_factory = mydict2
-            adjlist_inner_dict_factory = mydict3
+            inner_succ_dict_factory = mydict3s
+            inner_pred_dict_factory = mydict3p
+            inner_adj_dict_factory = mydict3a
             edge_key_dict_factory = mydict4
             edge_attr_dict_factory = mydict5
         G = MyGraph()
         assert isinstance(G._node, mydict1)
         assert isinstance(G._adj, mydict2)
         G.add_node(1)
-        assert isinstance(G._adj[1], mydict3)
+        if G.is_directed():
+            assert isinstance(G._adj[1], mydict3s)
+        else:
+            assert isinstance(G._adj[1], mydict3a)
         if G.is_directed():
             assert isinstance(G._pred, mydict2)
             assert isinstance(G._succ, mydict2)
-            assert isinstance(G._pred[1], mydict3)
+            assert isinstance(G._pred[1], mydict3p)
         G.add_edge(1, 2)
         if G.is_multigraph():
             assert isinstance(G._adj[1][2], mydict4)
@@ -62,7 +73,9 @@ class TestOrderedGraph(_TestGraph):
         class MyGraph(nx.Graph):
             node_dict_factory = OrderedDict
             adjlist_outer_dict_factory = OrderedDict
-            adjlist_inner_dict_factory = OrderedDict
+            inner_succ_dict_factory = OrderedDict
+            inner_pred_dict_factory = OrderedDict
+            inner_adj_dict_factory = OrderedDict
             edge_attr_dict_factory = OrderedDict
         self.Graph = MyGraph
 
@@ -102,7 +115,9 @@ class TestOrderedDiGraph(_TestDiGraph):
         class MyGraph(nx.DiGraph):
             node_dict_factory = OrderedDict
             adjlist_outer_dict_factory = OrderedDict
-            adjlist_inner_dict_factory = OrderedDict
+            inner_succ_dict_factory = OrderedDict
+            inner_pred_dict_factory = OrderedDict
+            inner_adj_dict_factory = OrderedDict
             edge_attr_dict_factory = OrderedDict
         self.Graph = MyGraph
 
@@ -152,7 +167,9 @@ class TestOrderedMultiGraph(_TestMultiGraph):
         class MyGraph(nx.MultiGraph):
             node_dict_factory = OrderedDict
             adjlist_outer_dict_factory = OrderedDict
-            adjlist_inner_dict_factory = OrderedDict
+            inner_succ_dict_factory = OrderedDict
+            inner_pred_dict_factory = OrderedDict
+            inner_adj_dict_factory = OrderedDict
             edge_key_dict_factory = OrderedDict
             edge_attr_dict_factory = OrderedDict
         self.Graph = MyGraph
@@ -171,7 +188,9 @@ class TestOrderedMultiDiGraph(_TestMultiDiGraph):
         class MyGraph(nx.MultiDiGraph):
             node_dict_factory = OrderedDict
             adjlist_outer_dict_factory = OrderedDict
-            adjlist_inner_dict_factory = OrderedDict
+            inner_succ_dict_factory = OrderedDict
+            inner_pred_dict_factory = OrderedDict
+            inner_adj_dict_factory = OrderedDict
             edge_key_dict_factory = OrderedDict
             edge_attr_dict_factory = OrderedDict
         self.Graph = MyGraph

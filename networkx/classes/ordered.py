@@ -48,7 +48,9 @@ class OrderedGraph(Graph):
     """Consistently ordered variant of :class:`~networkx.Graph`."""
     node_dict_factory = OrderedDict
     adjlist_outer_dict_factory = OrderedDict
-    adjlist_inner_dict_factory = OrderedDict
+    inner_succ_dict_factory = OrderedDict
+    inner_pred_dict_factory = OrderedDict
+    inner_adj_dict_factory = OrderedDict
     edge_attr_dict_factory = OrderedDict
 
 
@@ -56,7 +58,9 @@ class OrderedDiGraph(DiGraph):
     """Consistently ordered variant of :class:`~networkx.DiGraph`."""
     node_dict_factory = OrderedDict
     adjlist_outer_dict_factory = OrderedDict
-    adjlist_inner_dict_factory = OrderedDict
+    inner_succ_dict_factory = OrderedDict
+    inner_pred_dict_factory = OrderedDict
+    inner_adj_dict_factory = OrderedDict
     edge_attr_dict_factory = OrderedDict
 
 
@@ -64,7 +68,9 @@ class OrderedMultiGraph(MultiGraph):
     """Consistently ordered variant of :class:`~networkx.MultiGraph`."""
     node_dict_factory = OrderedDict
     adjlist_outer_dict_factory = OrderedDict
-    adjlist_inner_dict_factory = OrderedDict
+    inner_succ_dict_factory = OrderedDict
+    inner_pred_dict_factory = OrderedDict
+    inner_adj_dict_factory = OrderedDict
     edge_key_dict_factory = OrderedDict
     edge_attr_dict_factory = OrderedDict
 
@@ -73,6 +79,8 @@ class OrderedMultiDiGraph(MultiDiGraph):
     """Consistently ordered variant of :class:`~networkx.MultiDiGraph`."""
     node_dict_factory = OrderedDict
     adjlist_outer_dict_factory = OrderedDict
-    adjlist_inner_dict_factory = OrderedDict
+    inner_succ_dict_factory = OrderedDict
+    inner_pred_dict_factory = OrderedDict
+    inner_adj_dict_factory = OrderedDict
     edge_key_dict_factory = OrderedDict
     edge_attr_dict_factory = OrderedDict
