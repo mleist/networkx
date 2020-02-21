@@ -7,8 +7,8 @@ NetworkX
 .. image:: https://img.shields.io/pypi/pyversions/networkx.svg
    :target: https://pypi.org/project/networkx/
 
-.. image:: https://travis-ci.org/networkx/networkx.svg?branch=master
-   :target: https://travis-ci.org/networkx/networkx
+.. image:: https://travis-ci.org/mleist/networkx.svg?branch=master
+   :target: https://travis-ci.org/mleist/networkx
 
 .. image:: https://ci.appveyor.com/api/projects/status/github/networkx/networkx?branch=master&svg=true
    :target: https://ci.appveyor.com/project/dschult/networkx-pqott
